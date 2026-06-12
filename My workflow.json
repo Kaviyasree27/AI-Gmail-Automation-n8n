@@ -1,0 +1,140 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8a165260-0233-45a9-9908-f1f52e3e2354",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7dc941b2-a7c3-4adb-bdc9-c07e0367a4a2",
+              "name": "recipient",
+              "value": "kaviyasree.tech@gmail.com",
+              "type": "string"
+            },
+            {
+              "id": "2ccd72ff-fb46-4295-9cca-380f134cb021",
+              "name": "topic",
+              "value": "Leave Request",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        192,
+        -112
+      ],
+      "id": "58b0f52f-b49d-402a-be4b-3229f92c5b6f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "models/gemini-3-flash-preview"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Write a professional email for the topic: {{$json.topic}}\n\nRules:\n\n* Generate only ONE email.\n* Do not provide multiple options.\n* Do not provide explanations.\n* Do not provide tips.\n* Do not use markdown symbols such as ###, **, or bullet points.\n* Format the email properly with line breaks.\n\nOutput format:\n\nSubject: [Subject]\n\nDear Sir/Madam,\n\n[Professional email body]\n\nRegards,\nKaviya Sree\n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        -112
+      ],
+      "id": "3d6a39f2-c56c-4c1c-a1d9-ac15e482d45c",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "2tm7UYdK2YyrIqcm",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "=surenthiraniiht@gmail.com",
+        "subject": "=Inquiry Regarding the Current Project Status",
+        "emailType": "text",
+        "message": "={{$json.content.parts[0].text}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        368,
+        80
+      ],
+      "id": "fa9b5f66-34ce-4b4e-80d1-7f121dd75593",
+      "name": "Send a message",
+      "webhookId": "1ebd2dde-309e-47b8-9b0b-6e4c89bbdb7d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "91iDYV0ggHITTjwh",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "b19e74ac-3fda-4f15-b214-354be39bdf06",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7f917d0e64a65d379739295e9371193f8e45bcd48a57754cb6b32fb0b54f01fd"
+  },
+  "nodeGroups": [],
+  "id": "uV9xC2MsOd0DXRAs",
+  "tags": []
+}
